@@ -4,8 +4,8 @@ services:
     runtime: node
     plan: free
     region: frankfurt
-    buildCommand: mkdir -p app && tar -xzf rdr2-marathon-tracker.tar.gz -C app && cd app && corepack enable && pnpm install --no-frozen-lockfile && pnpm build
-    startCommand: cd app && pnpm start
+    buildCommand: mkdir -p app && tar -xzf rdr2-marathon-tracker.tar.gz -C app && cd app && npm install --ignore-scripts && npm run build
+    startCommand: cd app && npm start
     healthCheckPath: /api/state
     envVars:
       - key: DATABASE_URL
