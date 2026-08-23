@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: rdr2-marathon-tracker
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: mkdir -p app && tar -xzf rdr2-marathon-tracker.tar.gz -C app && cd app && corepack enable && pnpm install --frozen-lockfile && pnpm build
+    startCommand: cd app && pnpm start
+    healthCheckPath: /api/state
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rdr2-marathon-db
+          property: connectionString
+      - key: CONTROL_PANEL_PASSWORD
+        sync: false
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: NODE_VERSION
+        value: 22
+
+databases:
+  - name: rdr2-marathon-db
+    plan: free
+    region: frankfurt
+    databaseName: rdr2_marathon
+    user: rdr2_tracker
